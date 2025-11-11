@@ -1,0 +1,43 @@
+{
+  "tests": [
+    {
+      "name": "Test OPTIONS request for CORS",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedHeaders": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, OPTIONS"
+      }
+    },
+    {
+      "name": "Test POST with valid product data",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "productName": "Беспроводные наушники",
+        "productCategory": "Электроника",
+        "productFeatures": "Bluetooth 5.0, шумоподавление"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "title": "string",
+        "description": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Test POST with missing required fields",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "productName": "Наушники"
+      },
+      "expectedStatus": 400,
+      "expectedBody": {
+        "error": "string"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

@@ -76,24 +76,41 @@ const Index = () => {
 
     setIsGenerating(true);
 
-    setTimeout(() => {
-      setGeneratedTitle(`${productName} - ${productCategory} премиум качества | Быстрая доставка по России`);
-      setGeneratedDescription(
-        `Представляем ${productName} - инновационный продукт в категории ${productCategory}. ` +
-        `${productFeatures ? `Особенности: ${productFeatures}. ` : ''}` +
-        `✨ Премиум качество, проверенное временем\n` +
-        `🚀 Быстрая доставка по всей России\n` +
-        `💯 Гарантия производителя\n` +
-        `🎁 Подарок к каждому заказу\n\n` +
-        `Закажите прямо сейчас и получите специальное предложение! ` +
-        `Ограниченное количество товара в наличии.`
-      );
-      setIsGenerating(false);
+    try {
+      const response = await fetch('https://functions.poehali.dev/e7d48e4f-87c2-4e8b-b95a-8cb3d71bb7d4', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          productName,
+          productCategory,
+          productFeatures
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Ошибка генерации');
+      }
+
+      setGeneratedTitle(data.title);
+      setGeneratedDescription(data.description);
+      
       toast({
         title: 'Готово!',
-        description: 'Карточка товара сгенерирована'
+        description: 'Карточка товара сгенерирована с помощью ИИ'
       });
-    }, 1500);
+    } catch (error) {
+      toast({
+        title: 'Ошибка',
+        description: error instanceof Error ? error.message : 'Не удалось сгенерировать карточку',
+        variant: 'destructive'
+      });
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   return (
