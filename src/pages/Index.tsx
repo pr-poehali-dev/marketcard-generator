@@ -26,42 +26,108 @@ const Index = () => {
       name: 'Электроника',
       description: 'Шаблон для гаджетов и техники',
       icon: 'Smartphone',
-      color: 'from-purple-500 to-pink-500'
+      color: 'from-purple-500 to-pink-500',
+      example: 'Смартфон премиум-класса с AI-камерой',
+      features: ['Технические характеристики', 'Инновационные функции', 'Гарантия качества']
     },
     {
       id: 2,
       name: 'Одежда',
       description: 'Шаблон для модной одежды',
       icon: 'ShoppingBag',
-      color: 'from-pink-500 to-orange-500'
+      color: 'from-pink-500 to-orange-500',
+      example: 'Стильная куртка из натуральной кожи',
+      features: ['Размерная сетка', 'Состав ткани', 'Уход за изделием']
     },
     {
       id: 3,
       name: 'Продукты',
       description: 'Шаблон для продуктов питания',
       icon: 'Apple',
-      color: 'from-orange-500 to-yellow-500'
+      color: 'from-orange-500 to-yellow-500',
+      example: 'Органический мёд с горных пасек',
+      features: ['Состав и БЖУ', 'Срок годности', 'Условия хранения']
     },
     {
       id: 4,
       name: 'Косметика',
       description: 'Шаблон для beauty-товаров',
       icon: 'Sparkles',
-      color: 'from-purple-500 to-blue-500'
+      color: 'from-purple-500 to-blue-500',
+      example: 'Увлажняющая сыворотка для лица',
+      features: ['Активные компоненты', 'Тип кожи', 'Эффект применения']
     },
     {
       id: 5,
       name: 'Мебель',
       description: 'Шаблон для мебели и декора',
       icon: 'Home',
-      color: 'from-blue-500 to-cyan-500'
+      color: 'from-blue-500 to-cyan-500',
+      example: 'Дизайнерский диван-трансформер',
+      features: ['Размеры и вес', 'Материалы', 'Комплектация']
     },
     {
       id: 6,
       name: 'Спорттовары',
       description: 'Шаблон для спортивных товаров',
       icon: 'Dumbbell',
-      color: 'from-green-500 to-emerald-500'
+      color: 'from-green-500 to-emerald-500',
+      example: 'Профессиональные беговые кроссовки',
+      features: ['Назначение', 'Технологии', 'Размерный ряд']
+    },
+    {
+      id: 7,
+      name: 'Детские товары',
+      description: 'Шаблон для товаров для детей',
+      icon: 'Baby',
+      color: 'from-yellow-500 to-pink-500',
+      example: 'Развивающая игрушка для малышей',
+      features: ['Возраст', 'Безопасность', 'Развивающий эффект']
+    },
+    {
+      id: 8,
+      name: 'Книги',
+      description: 'Шаблон для книг и печатных изданий',
+      icon: 'Book',
+      color: 'from-amber-500 to-orange-500',
+      example: 'Бестселлер №1 по психологии',
+      features: ['Автор и жанр', 'Количество страниц', 'Переплёт']
+    },
+    {
+      id: 9,
+      name: 'Украшения',
+      description: 'Шаблон для ювелирных изделий',
+      icon: 'Gem',
+      color: 'from-purple-600 to-pink-600',
+      example: 'Серебряное кольцо с фианитами',
+      features: ['Материал и проба', 'Размер', 'Вставки']
+    },
+    {
+      id: 10,
+      name: 'Автотовары',
+      description: 'Шаблон для автомобильных товаров',
+      icon: 'Car',
+      color: 'from-slate-500 to-gray-600',
+      example: 'Видеорегистратор с GPS',
+      features: ['Совместимость', 'Характеристики', 'Установка']
+    },
+    {
+      id: 11,
+      name: 'Зоотовары',
+      description: 'Шаблон для товаров для животных',
+      icon: 'Dog',
+      color: 'from-green-600 to-teal-500',
+      example: 'Премиум корм для собак крупных пород',
+      features: ['Для кого', 'Состав', 'Вес упаковки']
+    },
+    {
+      id: 12,
+      name: 'Инструменты',
+      description: 'Шаблон для строительных инструментов',
+      icon: 'Wrench',
+      color: 'from-orange-600 to-red-500',
+      example: 'Аккумуляторная дрель-шуруповёрт',
+      features: ['Мощность', 'Комплектация', 'Гарантия']
     }
   ];
 
@@ -404,18 +470,38 @@ const Index = () => {
                 <Card
                   key={template.id}
                   className="border-0 shadow-xl bg-white/90 backdrop-blur-sm hover-scale cursor-pointer group overflow-hidden"
+                  onClick={() => {
+                    setProductCategory(template.name);
+                    setActiveTab('generator');
+                    toast({
+                      title: 'Шаблон выбран',
+                      description: `Категория "${template.name}" установлена`
+                    });
+                  }}
                 >
                   <div className={`h-32 bg-gradient-to-br ${template.color} flex items-center justify-center transition-transform group-hover:scale-105`}>
                     <Icon name={template.icon as any} size={48} className="text-white" />
                   </div>
                   <CardHeader>
                     <CardTitle className="text-xl">{template.name}</CardTitle>
-                    <CardDescription className="text-base">{template.description}</CardDescription>
+                    <CardDescription className="text-base mb-3">{template.description}</CardDescription>
+                    <div className="space-y-2">
+                      <p className="text-xs text-muted-foreground font-medium">Пример:</p>
+                      <p className="text-sm italic">"{template.example}"</p>
+                      <div className="pt-2">
+                        <p className="text-xs text-muted-foreground font-medium mb-1">Включает:</p>
+                        <div className="flex flex-wrap gap-1">
+                          {template.features.map((feature, idx) => (
+                            <Badge key={idx} variant="secondary" className="text-xs">{feature}</Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                   </CardHeader>
                   <CardContent>
-                    <Button className="w-full" variant="outline">
-                      <Icon name="Eye" size={18} className="mr-2" />
-                      Просмотреть
+                    <Button className="w-full gradient-bg hover:opacity-90">
+                      <Icon name="Sparkles" size={18} className="mr-2" />
+                      Использовать шаблон
                     </Button>
                   </CardContent>
                 </Card>
