@@ -18,6 +18,7 @@ const Index = () => {
   const [generatedTitle, setGeneratedTitle] = useState('');
   const [generatedDescription, setGeneratedDescription] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
 
   const templates = [
     {
@@ -111,6 +112,29 @@ const Index = () => {
     } finally {
       setIsGenerating(false);
     }
+  };
+
+  const handleCopy = async (text: string, fieldName: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedField(fieldName);
+      toast({
+        title: 'Скопировано!',
+        description: 'Текст скопирован в буфер обмена'
+      });
+      setTimeout(() => setCopiedField(null), 2000);
+    } catch (error) {
+      toast({
+        title: 'Ошибка',
+        description: 'Не удалось скопировать текст',
+        variant: 'destructive'
+      });
+    }
+  };
+
+  const handleCopyAll = async () => {
+    const fullText = `${generatedTitle}\n\n${generatedDescription}`;
+    await handleCopy(fullText, 'all');
   };
 
   return (
@@ -297,7 +321,17 @@ const Index = () => {
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
                           <Label className="text-base font-semibold">Заголовок</Label>
-                          <Badge className="gradient-bg">SEO оптимизирован</Badge>
+                          <div className="flex items-center gap-2">
+                            <Badge className="gradient-bg">SEO оптимизирован</Badge>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => handleCopy(generatedTitle, 'title')}
+                              className="h-7 px-2"
+                            >
+                              <Icon name={copiedField === 'title' ? 'Check' : 'Copy'} size={14} />
+                            </Button>
+                          </div>
                         </div>
                         <div className="p-4 bg-muted rounded-lg">
                           <p className="font-medium text-base">{generatedTitle}</p>
@@ -307,7 +341,17 @@ const Index = () => {
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
                           <Label className="text-base font-semibold">Описание</Label>
-                          <Badge variant="secondary">Готово к публикации</Badge>
+                          <div className="flex items-center gap-2">
+                            <Badge variant="secondary">Готово к публикации</Badge>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => handleCopy(generatedDescription, 'description')}
+                              className="h-7 px-2"
+                            >
+                              <Icon name={copiedField === 'description' ? 'Check' : 'Copy'} size={14} />
+                            </Button>
+                          </div>
                         </div>
                         <div className="p-4 bg-muted rounded-lg max-h-80 overflow-y-auto">
                           <p className="text-base whitespace-pre-line">{generatedDescription}</p>
@@ -315,13 +359,20 @@ const Index = () => {
                       </div>
 
                       <div className="flex gap-3">
-                        <Button variant="outline" className="flex-1 h-12">
-                          <Icon name="Copy" size={18} className="mr-2" />
-                          Копировать
+                        <Button 
+                          variant="outline" 
+                          className="flex-1 h-12"
+                          onClick={handleCopyAll}
+                        >
+                          <Icon name={copiedField === 'all' ? 'Check' : 'Copy'} size={18} className="mr-2" />
+                          {copiedField === 'all' ? 'Скопировано!' : 'Копировать всё'}
                         </Button>
-                        <Button className="flex-1 h-12 gradient-bg hover:opacity-90">
+                        <Button 
+                          className="flex-1 h-12 gradient-bg hover:opacity-90"
+                          onClick={handleCopyAll}
+                        >
                           <Icon name="Download" size={18} className="mr-2" />
-                          Сохранить
+                          Экспортировать
                         </Button>
                       </div>
                     </>
